@@ -1,0 +1,57 @@
+.header {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  height: 50px;
+  padding: 5px 30px 0;
+}
+
+.selectors {
+  flex-grow: 1;
+}
+
+.prev {
+  margin-right: 10px;
+}
+
+.next {
+  margin: 0 10px;
+}
+
+.prev,
+.next,
+.views > span,
+.today {
+  cursor: pointer;
+  user-select: none;
+}
+
+.prev:active,
+.next:active {
+  color: #0078d4;
+}
+
+.title {
+  margin-left: 5px;
+  user-select: none;
+}
+
+.modes {
+  flex-grow: 1;
+
+  display: flex;
+  justify-content: flex-end;
+}
+
+.views {
+  border-right: 1px solid #d3d3d3;
+}
+
+.views > span {
+  margin-right: 10px;
+}
+
+.today {
+  margin-left: 10px;
+}

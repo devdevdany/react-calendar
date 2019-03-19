@@ -1,0 +1,10 @@
+.cell {
+  cursor: pointer;
+  height: 15vh;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+
+.number {
+  padding-left: 10px;
+}
