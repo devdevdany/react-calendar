@@ -25,10 +25,10 @@ const Header = ({ month, prevMonth, nextMonth, setToday }) => (
     </div>
     <div className="modes">
       <div className="views">
-        <span className="ms-font-l" role="button" tabIndex={1}>
+        <span className="ms-font-l" role="button" tabIndex={0}>
           Week
         </span>
-        <span className="ms-font-l" role="button" tabIndex={2}>
+        <span className="ms-font-l" role="button" tabIndex={0}>
           Month
         </span>
       </div>
