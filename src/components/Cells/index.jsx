@@ -22,30 +22,37 @@ const Cells = ({ month, selectedDay, onDateClick }) => {
 
   while (day <= endDate) {
     for (let i = 0; i < 7; i += 1) {
-      if (dateFns.isSameDay(day, monthStart) || dateFns.isSameDay(day, nextMonthStart)) {
-        formattedDate = dateFns.format(day, firstFormat);
+      const dayCopy = day;
+
+      if (dateFns.isSameDay(dayCopy, monthStart) || dateFns.isSameDay(dayCopy, nextMonthStart)) {
+        formattedDate = dateFns.format(dayCopy, firstFormat);
       } else {
-        formattedDate = dateFns.format(day, format);
+        formattedDate = dateFns.format(dayCopy, format);
       }
 
-      const cloneDay = day;
+      let numberStyles = '';
+      if (!dateFns.isSameMonth(dayCopy, monthStart)) {
+        numberStyles += ' ms-fontColor-neutralTertiary';
+      }
 
-      let classNames = '';
-      if (!dateFns.isSameMonth(day, monthStart)) {
-        classNames += ' ms-fontColor-neutralTertiary';
-      } else if (dateFns.isSameDay(day, selectedDay)) {
-        classNames += ' selected';
+      let cellStyles = '';
+      if (dateFns.isSameDay(dayCopy, selectedDay)) {
+        cellStyles += ' selected';
+      }
+      if (dateFns.isSameDay(dayCopy, new Date())) {
+        cellStyles += ' today-cell';
       }
 
       days.push(
         <div
-          className="cell ms-borderColor-neutralLight"
-          onClick={() => onDateClick(dateFns.parse(cloneDay))}
+          className={`cell ms-borderColor-neutralLight${cellStyles}`}
+          onClick={() => onDateClick(dateFns.parse(dayCopy))}
           role="button"
           tabIndex={0}
           onKeyUp={() => {}}
+          key={dayCopy}
         >
-          <span className={`number ms-font-xl ms-fontColor-neutralPrimaryAlt${classNames}`}>
+          <span className={`number ms-font-xl ms-fontColor-neutralPrimaryAlt${numberStyles}`}>
             {formattedDate}
           </span>
         </div>,
@@ -54,8 +61,7 @@ const Cells = ({ month, selectedDay, onDateClick }) => {
       day = dateFns.addDays(day, 1);
     }
 
-    rows.push(<Fragment>{days}</Fragment>);
-
+    rows.push(<Fragment key={day}>{days}</Fragment>);
     days = [];
   }
 

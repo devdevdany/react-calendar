@@ -3,8 +3,22 @@
   height: 15vh;
   border-bottom-width: 1px;
   border-bottom-style: solid;
+  outline: none;
+  user-select: none;
+}
+
+.cell:hover {
+  background-color: #f4f4f4;
 }
 
 .number {
   padding-left: 10px;
+}
+
+.selected {
+  background-color: #eff6fc;
+}
+
+.today-cell {
+  border-top: 4px solid #0078d4;
 }

@@ -21,6 +21,7 @@ const Calendar = () => {
 
   const setToday = () => {
     setMonth(new Date());
+    setSelectedDay(new Date());
   };
 
   const onDateClick = day => {
