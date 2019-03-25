@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import dateFns from 'date-fns';
 import { Icon, initializeIcons } from 'office-ui-fabric-react';
+import ViewContext from '../../contexts/ViewContext';
 import PeriodContext from '../../contexts/PeriodContext';
 import SelectedContext from '../../contexts/SelectedContext';
 import './Header.css';
@@ -8,15 +9,62 @@ import './Header.css';
 initializeIcons();
 
 const Header = () => {
-  const renderSelectors = (period, onPeriodChange) => {
-    const format = 'MMMM YYYY';
+  const keyHandler = (event, action) => {
+    switch (event.key) {
+      case ' ':
+      case 'Enter':
+        action();
+        break;
+      default:
+        break;
+    }
+  };
+
+  const renderSelectors = (period, onPeriodChange, view) => {
+    let title = '';
+    let sub;
+    let add;
+
+    switch (view) {
+      case 'month':
+        title = dateFns.format(period, 'MMMM YYYY');
+
+        sub = dateFns.subMonths;
+        add = dateFns.addMonths;
+        break;
+      case 'week': {
+        const start = dateFns.startOfWeek(period);
+        const end = dateFns.endOfWeek(period);
+        let startFormat = '';
+        let endFormat = '';
+
+        if (dateFns.differenceInCalendarYears(end, start) > 0) {
+          startFormat = 'MMMM D, YYYY – ';
+          endFormat = 'MMMM D, YYYY';
+        } else if (dateFns.differenceInCalendarMonths(end, start) > 0) {
+          startFormat = 'MMMM D – ';
+          endFormat = 'MMMM D, YYYY';
+        } else {
+          startFormat = 'MMMM D–';
+          endFormat = 'D, YYYY';
+        }
+
+        title = `${dateFns.format(start, startFormat)}${dateFns.format(end, endFormat)}`;
+
+        sub = dateFns.subWeeks;
+        add = dateFns.addWeeks;
+        break;
+      }
+      default:
+        break;
+    }
 
     const onPrevClick = () => {
-      onPeriodChange(dateFns.subMonths(period, 1));
+      onPeriodChange(sub(period, 1));
     };
 
     const onNextClick = () => {
-      onPeriodChange(dateFns.addMonths(period, 1));
+      onPeriodChange(add(period, 1));
     };
 
     return (
@@ -31,28 +79,54 @@ const Header = () => {
           className="next ms-font-s ms-fontColor-neutralSecondary ms-fontColor-neutralDark--hover"
           onClick={onNextClick}
         />
-        <span className="title ms-fontSize-xl">{dateFns.format(period, format)}</span>
+        <span className="title ms-fontSize-xl">{title}</span>
       </div>
     );
   };
 
-  const renderModes = (onSelectedChange, onPeriodChange) => {
-    const today = () => {
+  const renderModes = (onSelectedChange, onPeriodChange, view, onViewChange) => {
+    const setToday = () => {
       onPeriodChange(new Date());
       onSelectedChange(new Date());
+    };
+
+    const setWeek = () => {
+      onViewChange('week');
+    };
+
+    const setMonth = () => {
+      onViewChange('month');
     };
 
     return (
       <div className="modes">
         <div className="views">
-          <span className="ms-font-l" role="button" tabIndex={0}>
+          <span
+            className={`ms-font-l ${view === 'week' ? 'ms-fontColor-themePrimary' : ''}`}
+            role="button"
+            tabIndex={0}
+            onClick={setWeek}
+            onKeyUp={e => keyHandler(e, setWeek)}
+          >
             Week
           </span>
-          <span className="ms-font-l" role="button" tabIndex={0}>
+          <span
+            className={`ms-font-l ${view === 'month' ? 'ms-fontColor-themePrimary' : ''}`}
+            role="button"
+            tabIndex={0}
+            onClick={setMonth}
+            onKeyUp={e => keyHandler(e, setMonth)}
+          >
             Month
           </span>
         </div>
-        <span className="today ms-font-l" role="button" tabIndex={0} onClick={today}>
+        <span
+          className="today ms-font-l"
+          role="button"
+          tabIndex={0}
+          onClick={setToday}
+          onKeyUp={e => keyHandler(e, setToday)}
+        >
           Today
         </span>
       </div>
@@ -61,16 +135,22 @@ const Header = () => {
 
   return (
     <div className="header">
-      <PeriodContext.Consumer>
-        {({ period, onPeriodChange }) => (
-          <Fragment>
-            {renderSelectors(period, onPeriodChange)}
-            <SelectedContext.Consumer>
-              {({ onSelectedChange }) => renderModes(onSelectedChange, onPeriodChange)}
-            </SelectedContext.Consumer>
-          </Fragment>
+      <ViewContext.Consumer>
+        {({ view, onViewChange }) => (
+          <PeriodContext.Consumer>
+            {({ period, onPeriodChange }) => (
+              <Fragment>
+                {renderSelectors(period, onPeriodChange, view)}
+                <SelectedContext.Consumer>
+                  {({ onSelectedChange }) =>
+                    renderModes(onSelectedChange, onPeriodChange, view, onViewChange)
+                  }
+                </SelectedContext.Consumer>
+              </Fragment>
+            )}
+          </PeriodContext.Consumer>
         )}
-      </PeriodContext.Consumer>
+      </ViewContext.Consumer>
     </div>
   );
 };
