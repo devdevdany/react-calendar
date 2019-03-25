@@ -72,12 +72,16 @@ const Header = () => {
         <Icon
           iconName="ChevronLeftSmall"
           className="prev ms-font-s ms-fontColor-neutralSecondary ms-fontColor-neutralDark--hover"
+          tabIndex={0}
           onClick={onPrevClick}
+          onKeyUp={e => keyHandler(e, onPrevClick)}
         />
         <Icon
           iconName="ChevronRightSmall"
           className="next ms-font-s ms-fontColor-neutralSecondary ms-fontColor-neutralDark--hover"
+          tabIndex={0}
           onClick={onNextClick}
+          onKeyUp={e => keyHandler(e, onNextClick)}
         />
         <span className="title ms-fontSize-xl">{title}</span>
       </div>
