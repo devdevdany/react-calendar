@@ -1,9 +1,8 @@
 refactor
-hooks inst of props
-today
 events
-suspense
+
 keyboard
-highlight mode
 week
+
+animations
 mobile
