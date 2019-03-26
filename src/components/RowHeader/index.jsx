@@ -5,31 +5,35 @@ import ViewContext from '../../contexts/ViewContext';
 import PeriodContext from '../../contexts/PeriodContext';
 
 const RowHeader = () => {
+  const renderMonthHeader = days =>
+    days.map(day => (
+      <div className="month ms-font-m ms-bgColor-neutralLighterAlt" key={day}>
+        {dateFns.format(day, 'dddd')}
+      </div>
+    ));
+
+  const renderWeekHeader = days =>
+    days.map(day => {
+      const todayStyles = dateFns.isToday(day) ? ' today-header ms-fontColor-themePrimary' : '';
+
+      return (
+        <div className={`week ms-font-m ms-bgColor-neutralLighterAlt${todayStyles}`} key={day}>
+          {dateFns.format(day, 'D dddd')}
+        </div>
+      );
+    });
+
   const renderRowHeader = (period, view) => {
-    let format = '';
+    const days = dateFns.eachDay(dateFns.startOfWeek(period), dateFns.endOfWeek(period));
+
     switch (view) {
       case 'month':
-        format = 'dddd';
-        break;
+        return renderMonthHeader(days);
       case 'week':
-        format = 'D dddd';
-        break;
+        return renderWeekHeader(days);
       default:
         break;
     }
-
-    const startOfWeek = dateFns.startOfWeek(period);
-    const days = [];
-
-    for (let i = 0; i < 7; i += 1) {
-      days.push(
-        <div className="day ms-font-m ms-bgColor-neutralLighterAlt" key={i}>
-          {dateFns.format(dateFns.addDays(startOfWeek, i), format)}
-        </div>,
-      );
-    }
-
-    return days;
   };
 
   return (

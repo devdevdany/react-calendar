@@ -1,6 +1,8 @@
 .cell {
   cursor: pointer;
   height: 14vh;
+  padding-top: 3px;
+
   border-bottom-width: 1px;
   border-bottom-style: solid;
   user-select: none;
@@ -19,5 +21,6 @@
 }
 
 .today-cell {
-  border-top: 4px solid #0078d4;
+  border-top: 3px solid #0078d4;
+  padding-top: 0;
 }

@@ -7,24 +7,26 @@ import PeriodContext from '../../contexts/PeriodContext';
 import SelectedContext from '../../contexts/SelectedContext';
 
 const Cells = () => {
-  const renderCells = (selected, onSelectedChange, period, view) => {
+  const renderMonth = (selected, onSelectedChange, period) => {
     const monthStart = dateFns.startOfMonth(period);
     const monthEnd = dateFns.endOfMonth(period);
-
     const days = dateFns.eachDay(dateFns.startOfWeek(monthStart), dateFns.endOfWeek(monthEnd));
 
     return days.map(day => {
       const format = dateFns.isFirstDayOfMonth(day) ? 'MMM D' : 'D';
 
       let cellStyles = '';
+      let numberStyles = '';
+
+      if (dateFns.isToday(day)) {
+        cellStyles += ' today-cell';
+        numberStyles += ' ms-fontColor-themePrimary';
+      } else {
+        numberStyles += ' ms-fontColor-neutralPrimaryAlt';
+      }
       if (dateFns.isSameDay(day, selected)) {
         cellStyles += ' selected';
       }
-      if (dateFns.isSameDay(day, new Date())) {
-        cellStyles += ' today-cell';
-      }
-
-      let numberStyles = '';
       if (!dateFns.isSameMonth(day, monthStart)) {
         numberStyles += ' ms-fontColor-neutralTertiary';
       }
@@ -38,12 +40,21 @@ const Cells = () => {
           onClick={() => onSelectedChange(day)}
           onKeyUp={e => keyHandler(e, onSelectedChange.bind(this, day))}
         >
-          <span className={`number ms-font-xl ms-fontColor-neutralPrimaryAlt${numberStyles}`}>
-            {dateFns.format(day, format)}
-          </span>
+          <span className={`number ms-font-xl${numberStyles}`}>{dateFns.format(day, format)}</span>
         </div>
       );
     });
+  };
+
+  const renderCells = (selected, onSelectedChange, period, view) => {
+    switch (view) {
+      case 'month':
+        return renderMonth(selected, onSelectedChange, period);
+      case 'week':
+        break;
+      default:
+        break;
+    }
   };
 
   return (

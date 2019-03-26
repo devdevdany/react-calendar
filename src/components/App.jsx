@@ -1,5 +1,6 @@
 import React from 'react';
 import 'remove-focus-outline';
+import './App.css';
 import { ViewStore } from '../contexts/ViewContext';
 import { PeriodStore } from '../contexts/PeriodContext';
 import { SelectedStore } from '../contexts/SelectedContext';
