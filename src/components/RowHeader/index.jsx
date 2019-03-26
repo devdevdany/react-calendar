@@ -1,14 +1,11 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import dateFns from 'date-fns';
+import './RowHeader.css';
 import ViewContext from '../../contexts/ViewContext';
 import PeriodContext from '../../contexts/PeriodContext';
-import './RowHeader.css';
 
 const RowHeader = () => {
   const renderRowHeader = (period, view) => {
-    const days = [];
-    const startDate = dateFns.startOfWeek(period);
-
     let format = '';
     switch (view) {
       case 'month':
@@ -21,15 +18,18 @@ const RowHeader = () => {
         break;
     }
 
+    const startOfWeek = dateFns.startOfWeek(period);
+    const days = [];
+
     for (let i = 0; i < 7; i += 1) {
       days.push(
         <div className="day ms-font-m ms-bgColor-neutralLighterAlt" key={i}>
-          {dateFns.format(dateFns.addDays(startDate, i), format)}
+          {dateFns.format(dateFns.addDays(startOfWeek, i), format)}
         </div>,
       );
     }
 
-    return <Fragment>{days}</Fragment>;
+    return days;
   };
 
   return (

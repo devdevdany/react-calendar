@@ -1,25 +1,15 @@
 import React, { Fragment } from 'react';
 import dateFns from 'date-fns';
 import { Icon, initializeIcons } from 'office-ui-fabric-react';
+import './Header.css';
+import keyHandler from '../utils/keyHandler';
 import ViewContext from '../../contexts/ViewContext';
 import PeriodContext from '../../contexts/PeriodContext';
 import SelectedContext from '../../contexts/SelectedContext';
-import './Header.css';
 
 initializeIcons();
 
 const Header = () => {
-  const keyHandler = (event, action) => {
-    switch (event.key) {
-      case ' ':
-      case 'Enter':
-        action();
-        break;
-      default:
-        break;
-    }
-  };
-
   const renderSelectors = (period, onPeriodChange, view) => {
     let title = '';
     let sub;

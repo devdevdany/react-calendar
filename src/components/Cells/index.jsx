@@ -1,83 +1,65 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import dateFns from 'date-fns';
 import './Cells.css';
+import keyHandler from '../utils/keyHandler';
+import ViewContext from '../../contexts/ViewContext';
 import PeriodContext from '../../contexts/PeriodContext';
 import SelectedContext from '../../contexts/SelectedContext';
 
-const format = 'D';
-const firstFormat = 'MMM D';
-
 const Cells = () => {
-  const renderCells = (selected, onSelectedChange, period) => {
+  const renderCells = (selected, onSelectedChange, period, view) => {
     const monthStart = dateFns.startOfMonth(period);
-    const nextMonthStart = dateFns.addMonths(monthStart, 1);
-    const monthEnd = dateFns.endOfMonth(monthStart);
+    const monthEnd = dateFns.endOfMonth(period);
 
-    const startDate = dateFns.startOfWeek(monthStart);
-    const endDate = dateFns.endOfWeek(monthEnd);
+    const days = dateFns.eachDay(dateFns.startOfWeek(monthStart), dateFns.endOfWeek(monthEnd));
 
-    const rows = [];
+    return days.map(day => {
+      const format = dateFns.isFirstDayOfMonth(day) ? 'MMM D' : 'D';
 
-    let days = [];
-    let day = startDate;
-    let formattedDate = '';
-
-    while (day <= endDate) {
-      for (let i = 0; i < 7; i += 1) {
-        const dayCopy = day;
-
-        if (dateFns.isSameDay(dayCopy, monthStart) || dateFns.isSameDay(dayCopy, nextMonthStart)) {
-          formattedDate = dateFns.format(dayCopy, firstFormat);
-        } else {
-          formattedDate = dateFns.format(dayCopy, format);
-        }
-
-        let numberStyles = '';
-        if (!dateFns.isSameMonth(dayCopy, monthStart)) {
-          numberStyles += ' ms-fontColor-neutralTertiary';
-        }
-
-        let cellStyles = '';
-        if (dateFns.isSameDay(dayCopy, selected)) {
-          cellStyles += ' selected';
-        }
-        if (dateFns.isSameDay(dayCopy, new Date())) {
-          cellStyles += ' today-cell';
-        }
-
-        days.push(
-          <div
-            className={`cell ms-borderColor-neutralLight${cellStyles}`}
-            onClick={() => onSelectedChange(dayCopy)}
-            role="button"
-            tabIndex={0}
-            onKeyUp={() => {}}
-            key={dayCopy}
-          >
-            <span className={`number ms-font-xl ms-fontColor-neutralPrimaryAlt${numberStyles}`}>
-              {formattedDate}
-            </span>
-          </div>,
-        );
-
-        day = dateFns.addDays(day, 1);
+      let cellStyles = '';
+      if (dateFns.isSameDay(day, selected)) {
+        cellStyles += ' selected';
+      }
+      if (dateFns.isSameDay(day, new Date())) {
+        cellStyles += ' today-cell';
       }
 
-      rows.push(<Fragment key={day}>{days}</Fragment>);
-      days = [];
-    }
+      let numberStyles = '';
+      if (!dateFns.isSameMonth(day, monthStart)) {
+        numberStyles += ' ms-fontColor-neutralTertiary';
+      }
 
-    return <Fragment>{rows}</Fragment>;
+      return (
+        <div
+          className={`cell ms-borderColor-neutralLight${cellStyles}`}
+          key={day}
+          role="button"
+          tabIndex={0}
+          onClick={() => onSelectedChange(day)}
+          onKeyUp={e => keyHandler(e, onSelectedChange.bind(this, day))}
+        >
+          <span className={`number ms-font-xl ms-fontColor-neutralPrimaryAlt${numberStyles}`}>
+            {dateFns.format(day, format)}
+          </span>
+        </div>
+      );
+    });
   };
 
   return (
-    <PeriodContext.Consumer>
-      {({ period }) => (
-        <SelectedContext.Consumer>
-          {({ selected, onSelectedChange }) => renderCells(selected, onSelectedChange, period)}
-        </SelectedContext.Consumer>
+    <ViewContext.Consumer>
+      {({ view }) => (
+        <PeriodContext.Consumer>
+          {({ period }) => (
+            <SelectedContext.Consumer>
+              {({ selected, onSelectedChange }) =>
+                renderCells(selected, onSelectedChange, period, view)
+              }
+            </SelectedContext.Consumer>
+          )}
+        </PeriodContext.Consumer>
       )}
-    </PeriodContext.Consumer>
+    </ViewContext.Consumer>
   );
 };
 

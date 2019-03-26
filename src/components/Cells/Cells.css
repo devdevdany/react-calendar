@@ -1,9 +1,8 @@
 .cell {
   cursor: pointer;
-  height: 15vh;
+  height: 14vh;
   border-bottom-width: 1px;
   border-bottom-style: solid;
-  outline: none;
   user-select: none;
 }
 
