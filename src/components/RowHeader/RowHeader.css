@@ -1,15 +1,20 @@
-.month,
-.week {
+.month-header,
+.week-header,
+.week-hour-header {
   line-height: 30px;
   height: 30px;
 }
 
-.month {
+.month-header {
   padding: 0 0 2px 6%;
 }
 
-.week {
+.week-header {
   padding: 3px 10px 0 12px;
+}
+
+.week-hour-header {
+  width: 58px;
 }
 
 .today-header {

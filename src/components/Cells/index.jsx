@@ -53,7 +53,7 @@ const Cells = () => {
       case 'week':
         break;
       default:
-        break;
+        return <span>Incorrect view set on Cells</span>;
     }
   };
 
