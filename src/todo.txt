@@ -1,7 +1,10 @@
-week
-
+hour line
+scroll to hour
+refactor
 events
 keyboard
+
+border color
 
 animations
 mobile

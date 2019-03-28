@@ -7,6 +7,63 @@ import PeriodContext from '../../contexts/PeriodContext';
 import SelectedContext from '../../contexts/SelectedContext';
 
 const Cells = () => {
+  const renderWeek = (selected, onSelectedChange, period) => {
+    const startingHour = dateFns.startOfToday();
+    const endingHour = dateFns.endOfToday();
+    const hoursBars = [];
+    for (let hour = startingHour; hour < endingHour; hour = dateFns.addHours(hour, 1)) {
+      let hourBarStyles = '';
+
+      if (dateFns.isThisWeek(period) && dateFns.isThisHour(hour)) {
+        hourBarStyles += ' ms-bgColor-themeSecondary this-hour-bar';
+      }
+
+      const bar = (
+        <div className={`hour-bar${hourBarStyles}`} key={hour}>
+          {dateFns.format(hour, 'ha').slice(0, -1)}
+        </div>
+      );
+
+      hoursBars.push(bar);
+    }
+
+    const weekStart = dateFns.startOfWeek(period);
+    const weekEnd = dateFns.endOfWeek(period);
+    const days = dateFns.eachDay(weekStart, weekEnd);
+
+    const hours = days.map(day => {
+      const start = dateFns.startOfDay(day);
+      const end = dateFns.endOfDay(day);
+
+      const dayHours = [];
+
+      for (let hour = start; hour < end; hour = dateFns.addHours(hour, 0.5)) {
+        let hourStyles = '';
+        if (dateFns.isWeekend(day)) {
+          hourStyles += ' weekend-hour';
+        }
+        if (dateFns.getMinutes(hour) === 0) {
+          hourStyles += ' half-hour-separator';
+        }
+
+        dayHours.push(
+          <div
+            className={`hour ${hourStyles}`}
+            key={hour}
+            role="button"
+            tabIndex={0}
+            onClick={() => onSelectedChange(hour)}
+            onKeyUp={e => keyHandler(e, onSelectedChange.bind(this, hour))}
+          />,
+        );
+      }
+
+      return dayHours;
+    });
+
+    return [...hoursBars, ...hours];
+  };
+
   const renderMonth = (selected, onSelectedChange, period) => {
     const monthStart = dateFns.startOfMonth(period);
     const monthEnd = dateFns.endOfMonth(period);
@@ -51,7 +108,7 @@ const Cells = () => {
       case 'month':
         return renderMonth(selected, onSelectedChange, period);
       case 'week':
-        break;
+        return renderWeek(selected, onSelectedChange, period);
       default:
         return <span>Incorrect view set on Cells</span>;
     }

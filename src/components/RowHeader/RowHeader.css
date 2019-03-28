@@ -1,24 +1,29 @@
 .month-header,
-.week-header,
-.week-hour-header {
+.week-header {
   line-height: 30px;
-  height: 30px;
+  user-select: none;
 }
 
 .month-header {
+  height: 28px;
   padding: 0 0 2px 6%;
 }
 
 .week-header {
-  padding: 3px 10px 0 12px;
+  height: 27px;
+  padding: 3px 0 0 12px;
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .week-hour-header {
   width: 58px;
+  height: 30px;
 }
 
 .today-header {
   border-top: 3px solid #0078d4;
-  padding-top: 0;
-  padding-left: 20px;
+  padding: 0 0 0 20px;
 }

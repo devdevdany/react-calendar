@@ -1,3 +1,5 @@
+/* Month */
+
 .cell {
   cursor: pointer;
   height: 14vh;
@@ -23,4 +25,46 @@
 .today-cell {
   border-top: 3px solid #0078d4;
   padding-top: 0;
+}
+
+/* Week */
+
+.hour-bar {
+  width: 46px;
+  grid-row: span 2;
+
+  padding-left: 10px;
+
+  border-bottom: 1px solid #eaeaea;
+  border-right: 1px solid #eaeaea;
+
+  user-select: none;
+}
+
+.this-hour-bar {
+  color: white;
+}
+
+.hour {
+  border-bottom: 1px solid #eaeaea;
+  border-right: 1px solid #eaeaea;
+
+  user-select: none;
+}
+
+.weekend-hour {
+  background-color: #ecf8fe;
+}
+
+.half-hour-separator {
+  border-bottom: 1px dashed #eaeaea;
+}
+
+.hour-line {
+  position: absolute;
+  z-index: 1;
+
+  width: 300px;
+
+  border-bottom: 2px dotted #0078d4;
 }
