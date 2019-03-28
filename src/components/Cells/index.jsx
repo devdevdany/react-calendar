@@ -10,12 +10,28 @@ const Cells = () => {
   const renderWeek = (selected, onSelectedChange, period) => {
     const startingHour = dateFns.startOfToday();
     const endingHour = dateFns.endOfToday();
+
     const hoursBars = [];
     for (let hour = startingHour; hour < endingHour; hour = dateFns.addHours(hour, 1)) {
       let hourBarStyles = '';
 
       if (dateFns.isThisWeek(period) && dateFns.isThisHour(hour)) {
         hourBarStyles += ' ms-bgColor-themeSecondary this-hour-bar';
+
+        hoursBars.push(
+          <div
+            style={{
+              height: 0,
+              borderBottomWidth: 2,
+              borderBottomStyle: 'dotted',
+              borderBottomColor: '#0078d4',
+              zIndex: 1,
+              gridColumn: `2 / span ${dateFns.getDay(hour) + 1}`,
+              gridRow: dateFns.getHours(hour) * 2 + 1,
+              paddingTop: (dateFns.getMinutes(new Date()) * 26) / 30 - 2,
+            }}
+          />,
+        );
       }
 
       const bar = (
@@ -37,7 +53,7 @@ const Cells = () => {
 
       const dayHours = [];
 
-      for (let hour = start; hour < end; hour = dateFns.addHours(hour, 0.5)) {
+      for (let hour = start, row = 1; hour < end; hour = dateFns.addHours(hour, 0.5), row += 1) {
         let hourStyles = '';
         if (dateFns.isWeekend(day)) {
           hourStyles += ' weekend-hour';
@@ -49,6 +65,10 @@ const Cells = () => {
         dayHours.push(
           <div
             className={`hour ${hourStyles}`}
+            style={{
+              gridColumn: dateFns.getDay(hour) + 2,
+              gridRow: row,
+            }}
             key={hour}
             role="button"
             tabIndex={0}

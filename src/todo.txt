@@ -1,4 +1,3 @@
-hour line
 scroll to hour
 refactor
 events

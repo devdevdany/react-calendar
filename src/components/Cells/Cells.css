@@ -31,6 +31,7 @@
 
 .hour-bar {
   width: 46px;
+  grid-column: 1;
   grid-row: span 2;
 
   padding-left: 10px;
@@ -50,6 +51,7 @@
   border-right: 1px solid #eaeaea;
 
   user-select: none;
+  z-index: 0;
 }
 
 .weekend-hour {
@@ -58,13 +60,4 @@
 
 .half-hour-separator {
   border-bottom: 1px dashed #eaeaea;
-}
-
-.hour-line {
-  position: absolute;
-  z-index: 1;
-
-  width: 300px;
-
-  border-bottom: 2px dotted #0078d4;
 }
