@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import dateFns from 'date-fns';
 import './RowHeader.css';
 import ViewContext from '../../contexts/ViewContext';
 import PeriodContext from '../../contexts/PeriodContext';
 
 const RowHeader = () => {
+  const { view } = useContext(ViewContext);
+  const { period } = useContext(PeriodContext);
+
   const renderMonthHeader = days =>
     days.map(day => (
       <div className="month-header ms-font-m ms-bgColor-neutralLighterAlt" key={day}>
@@ -14,7 +17,7 @@ const RowHeader = () => {
 
   const renderWeekHeader = days => {
     const weekHourHeader = (
-      <div className="week-hour-header ms-font-m ms-bgColor-neutralLighterAlt" key="hour" />
+      <div className="week-hour-header ms-font-m ms-bgColor-neutralLighterAlt" key="hour-header" />
     );
 
     const weekDays = days.map(day => {
@@ -33,7 +36,7 @@ const RowHeader = () => {
     return [weekHourHeader, ...weekDays];
   };
 
-  const renderRowHeader = (period, view) => {
+  const renderRowHeader = () => {
     const days = dateFns.eachDay(dateFns.startOfWeek(period), dateFns.endOfWeek(period));
 
     switch (view) {
@@ -46,15 +49,7 @@ const RowHeader = () => {
     }
   };
 
-  return (
-    <ViewContext.Consumer>
-      {({ view }) => (
-        <PeriodContext.Consumer>
-          {({ period }) => renderRowHeader(period, view)}
-        </PeriodContext.Consumer>
-      )}
-    </ViewContext.Consumer>
-  );
+  return renderRowHeader();
 };
 
 export default RowHeader;

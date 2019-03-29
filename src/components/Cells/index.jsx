@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext, useRef, useEffect } from 'react';
 import dateFns from 'date-fns';
 import './Cells.css';
 import keyHandler from '../utils/keyHandler';
@@ -7,7 +7,21 @@ import PeriodContext from '../../contexts/PeriodContext';
 import SelectedContext from '../../contexts/SelectedContext';
 
 const Cells = () => {
-  const renderWeek = (selected, onSelectedChange, period) => {
+  const { view } = useContext(ViewContext);
+  const { period } = useContext(PeriodContext);
+  const { selected, onSelectedChange } = useContext(SelectedContext);
+
+  const hourIndicator = useRef(null);
+
+  const scrollToHour = () => hourIndicator.current.scrollIntoView();
+
+  useEffect(() => {
+    if (hourIndicator.current) {
+      scrollToHour();
+    }
+  }, []);
+
+  const renderWeek = () => {
     const startingHour = dateFns.startOfToday();
     const endingHour = dateFns.endOfToday();
 
@@ -20,6 +34,8 @@ const Cells = () => {
 
         hoursBars.push(
           <div
+            ref={hourIndicator}
+            key="hour-indicator"
             style={{
               height: 0,
               borderBottomWidth: 2,
@@ -84,7 +100,7 @@ const Cells = () => {
     return [...hoursBars, ...hours];
   };
 
-  const renderMonth = (selected, onSelectedChange, period) => {
+  const renderMonth = () => {
     const monthStart = dateFns.startOfMonth(period);
     const monthEnd = dateFns.endOfMonth(period);
     const days = dateFns.eachDay(dateFns.startOfWeek(monthStart), dateFns.endOfWeek(monthEnd));
@@ -123,32 +139,18 @@ const Cells = () => {
     });
   };
 
-  const renderCells = (selected, onSelectedChange, period, view) => {
+  const renderCells = () => {
     switch (view) {
       case 'month':
-        return renderMonth(selected, onSelectedChange, period);
+        return renderMonth();
       case 'week':
-        return renderWeek(selected, onSelectedChange, period);
+        return renderWeek();
       default:
         return <span>Incorrect view set on Cells</span>;
     }
   };
 
-  return (
-    <ViewContext.Consumer>
-      {({ view }) => (
-        <PeriodContext.Consumer>
-          {({ period }) => (
-            <SelectedContext.Consumer>
-              {({ selected, onSelectedChange }) =>
-                renderCells(selected, onSelectedChange, period, view)
-              }
-            </SelectedContext.Consumer>
-          )}
-        </PeriodContext.Consumer>
-      )}
-    </ViewContext.Consumer>
-  );
+  return renderCells();
 };
 
 export default Cells;

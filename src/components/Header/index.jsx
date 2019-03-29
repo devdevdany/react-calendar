@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { useContext } from 'react';
 import dateFns from 'date-fns';
 import { Icon, initializeIcons } from 'office-ui-fabric-react';
 import './Header.css';
@@ -10,7 +10,11 @@ import SelectedContext from '../../contexts/SelectedContext';
 initializeIcons();
 
 const Header = () => {
-  const renderSelectors = (period, onPeriodChange, view) => {
+  const { view, onViewChange } = useContext(ViewContext);
+  const { period, onPeriodChange } = useContext(PeriodContext);
+  const { onSelectedChange } = useContext(SelectedContext);
+
+  const renderSelectors = () => {
     let title = '';
     let sub;
     let add;
@@ -78,7 +82,7 @@ const Header = () => {
     );
   };
 
-  const renderModes = (onSelectedChange, onPeriodChange, view, onViewChange) => {
+  const renderModes = () => {
     const setToday = () => {
       onPeriodChange(new Date());
       onSelectedChange(new Date());
@@ -129,22 +133,8 @@ const Header = () => {
 
   return (
     <div className="header">
-      <ViewContext.Consumer>
-        {({ view, onViewChange }) => (
-          <PeriodContext.Consumer>
-            {({ period, onPeriodChange }) => (
-              <Fragment>
-                {renderSelectors(period, onPeriodChange, view)}
-                <SelectedContext.Consumer>
-                  {({ onSelectedChange }) =>
-                    renderModes(onSelectedChange, onPeriodChange, view, onViewChange)
-                  }
-                </SelectedContext.Consumer>
-              </Fragment>
-            )}
-          </PeriodContext.Consumer>
-        )}
-      </ViewContext.Consumer>
+      {renderSelectors()}
+      {renderModes()}
     </div>
   );
 };

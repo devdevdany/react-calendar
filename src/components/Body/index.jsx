@@ -1,10 +1,12 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useContext } from 'react';
 import './Body.css';
 import ViewContext from '../../contexts/ViewContext';
 import RowHeader from '../RowHeader';
 import Cells from '../Cells';
 
 const Body = () => {
+  const { view } = useContext(ViewContext);
+
   const renderMonth = () => (
     <div className="month">
       <RowHeader />
@@ -23,7 +25,7 @@ const Body = () => {
     </Fragment>
   );
 
-  const renderBody = view => {
+  const renderBody = () => {
     switch (view) {
       case 'month':
         return renderMonth();
@@ -34,7 +36,7 @@ const Body = () => {
     }
   };
 
-  return <ViewContext.Consumer>{({ view }) => renderBody(view)}</ViewContext.Consumer>;
+  return renderBody();
 };
 
 export default Body;

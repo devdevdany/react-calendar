@@ -1,6 +1,9 @@
-scroll to hour
-refactor
 events
+
+month & week components
+border color
+refactor
+
 keyboard
 
 border color
