@@ -23,6 +23,11 @@
   height: 30px;
 }
 
+.week-scrollbar-header {
+  width: 15px;
+  height: 30px;
+}
+
 .today-header {
   border-top: 3px solid #0078d4;
   padding: 0 0 0 20px;

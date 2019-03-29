@@ -17,7 +17,11 @@ const RowHeader = () => {
 
   const renderWeekHeader = days => {
     const weekHourHeader = (
-      <div className="week-hour-header ms-font-m ms-bgColor-neutralLighterAlt" key="hour-header" />
+      <div className="week-hour-header ms-bgColor-neutralLighterAlt" key="hour-header" />
+    );
+
+    const scrollbarHeader = (
+      <div className="week-scrollbar-header ms-bgColor-neutralLighterAlt" key="scrollbar-header" />
     );
 
     const weekDays = days.map(day => {
@@ -33,7 +37,7 @@ const RowHeader = () => {
       );
     });
 
-    return [weekHourHeader, ...weekDays];
+    return [weekHourHeader, ...weekDays, scrollbarHeader];
   };
 
   const renderRowHeader = () => {

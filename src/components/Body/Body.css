@@ -6,7 +6,7 @@
 
 .week-row-header {
   display: grid;
-  grid-template-columns: min-content repeat(7, 1fr);
+  grid-template-columns: min-content repeat(7, 1fr) min-content;
   grid-template-rows: auto;
 }
 

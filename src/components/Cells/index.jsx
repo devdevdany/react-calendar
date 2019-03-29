@@ -34,18 +34,14 @@ const Cells = () => {
 
         hoursBars.push(
           <div
-            ref={hourIndicator}
-            key="hour-indicator"
+            className="hour-indicator"
             style={{
-              height: 0,
-              borderBottomWidth: 2,
-              borderBottomStyle: 'dotted',
-              borderBottomColor: '#0078d4',
-              zIndex: 1,
               gridColumn: `2 / span ${dateFns.getDay(hour) + 1}`,
               gridRow: dateFns.getHours(hour) * 2 + 1,
-              paddingTop: (dateFns.getMinutes(new Date()) * 26) / 30 - 2,
+              marginTop: (dateFns.getMinutes(new Date()) * 26) / 30 - 2,
             }}
+            key="hour-indicator"
+            ref={hourIndicator}
           />,
         );
       }

@@ -61,3 +61,9 @@
 .half-hour-separator {
   border-bottom: 1px dashed #eaeaea;
 }
+
+.hour-indicator {
+  height: 0;
+  border-bottom: 2px dotted #0078d4;
+  z-index: 1;
+}

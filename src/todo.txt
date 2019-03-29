@@ -1,5 +1,6 @@
 events
 
+scrollbar width
 month & week components
 border color
 refactor
